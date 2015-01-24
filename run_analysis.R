@@ -66,3 +66,9 @@ final_data <- select(total_data,contains("Subject"))
 final_data <- cbind(final_data,select(total_data,contains("Activity")))
 final_data <- cbind(final_data,select(total_data,contains("mean",ignore.case=TRUE)))
 final_data <- cbind(final_data,select(total_data,contains("std",ignore.case=TRUE)))
+
+# Finally, we can move onto step 5, which asks for an independent tidy data set
+# with the average of each variable for each activity and each subject.
+second_data <- final_data %>% group_by(Activity,Subject)
+tidy_data <- summarise_each(second_data, funs(mean))
+write.table(tidy_data, "./tidy_data.txt",sep=",",row.name=FALSE)
