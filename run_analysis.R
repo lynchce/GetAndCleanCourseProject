@@ -1,5 +1,7 @@
 # Getting and Cleaning Data Course Project
 library(data.table)
+library(tidyr)
+library(dplyr)
 
 # Load feature names and clean them up
 features <- read.table("./features.txt",stringsAsFactors=FALSE)
