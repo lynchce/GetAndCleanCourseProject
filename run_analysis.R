@@ -6,6 +6,8 @@ features <- read.table("./features.txt",stringsAsFactors=FALSE)
 features <- features[,2]
 features <- gsub("[()]","",features)
 features <- gsub("[-]","_",features)
+features <- gsub("^t","Time",features)
+features <- gsub("^f","Frequency",features)
 features <- c("subject","activity",features)
 
 # Create a logical vector that corresponds to feature names 
@@ -14,6 +16,8 @@ features <- c("subject","activity",features)
 meansLogical <- grepl("(mean)",features, ignore.case=TRUE)
 stdLogical <- grepl("(std)",features, ignore.case=TRUE)
 meansAndStdLogical <- meansLogical | stdLogical
+# Add TRUE entries for the subject and activity variables
+varsToKeep <- meansAndStdLogical | c(TRUE, TRUE, rep(FALSE, length(meansAndStdLogical)-2))
 
 # Load and merge the test data together into one data table
 if(!exists("subject_test"))
@@ -53,5 +57,21 @@ if(!exists("y_train"))
 train_data <- cbind(subject_train,y_train,X_train)
 setnames(train_data,features)
 
-# Now row-bind the test and training data together to create the total dataset
+# Now row-bind the test and training data together to create the 
+# total dataset
 total_data <- rbind(test_data, train_data)
+
+# Create factors out of the activity information
+activities <- read.table("./activity_labels.txt")
+act_factors <- as.factor(activities[,2])
+act_factors <- factor(act_factors,levels(act_factors)[c(4,6,5,1,2,3)])
+
+# Change activity data from numeric to strings
+total_data$activity <- activities[total_data$activity,2]
+
+# Construct the data table with only subject, activity, and variables 
+# related to mean and std
+final_data <- select(total_data,contains("subject"))
+final_data <- cbind(final_data,select(total_data,contains("activity")))
+final_data <- cbind(final_data,select(total_data,contains("mean",ignore.case=TRUE)))
+final_data <- cbind(final_data,select(total_data,contains("std",ignore.case=TRUE)))
