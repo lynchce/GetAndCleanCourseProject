@@ -17,15 +17,15 @@ along with run_analysis.
 
 ## Steps followed
 ###Cleaning variable names
-*To make the variables easier to work with in R, the following characters were removed 
+* To make the variables easier to work with in R, the following characters were removed 
 as they were loaded from features.txt: (, ), -.
 
-*The "t" and "f" prefixes found on many feature names were transformed to "Time" and 
+* The "t" and "f" prefixes found on many feature names were transformed to "Time" and 
 "Frequency," respectively.
 
-*Some features contained the phrase "BodyBody;" this was shortened to "Body."
+* Some features contained the phrase "BodyBody;" this was shortened to "Body."
 
-*The "anglet" prefix was modified to "AngleTime."
+* The "anglet" prefix was modified to "AngleTime."
 
 This resulted in 565 variables, including "Subject" and "Activity."
 
